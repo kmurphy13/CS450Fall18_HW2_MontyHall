@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">MontyHall</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title">The Monty Hall Problem </string>
+    <string name="new_game">New Game</string>
+    <string name="continue_button">continue</string>
+    <string name="about">About</string>
+    <string name="about_text">This is St. Lawrence University CS450
+    Implementation of the Monty Hall Problem. This application was created
+    by Kira Murphy.</string>
+    <string name="about_title">About this application</string>
+    <string name="ok">OK</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_a_door">Choose a door:</string>
+    <string name="wins">Wins</string>
+    <string name="losses">Losses</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="switch_door">Switch</string>
+    <string name="change_door_prompt">Do you want to switch your door?</string>
+    <string name="winner">You win!</string>
+    <string name="loser">You lose!</string>
+    <string name="play_again">Play Again</string>
+    <string name="stay">Stay</string>
+    <string name="total">Total</string>
+    <string name="how_to_play">How to play</string>
+    <string name="how_to_play_title">How to play the Monty Hall game</string>
+    <string name="how_to_play_text">In the Monty Hall game, you will be shown three doors. Two of the doors have a goat behind them and one has a car. You will be asked to choose a door. Before opening the door that you have chosen, you will be shown a goat that is behind a different door. After being shown the goat, you can choose to switch to the other unopened door, or stay with your original choice.</string>
+</resources>
