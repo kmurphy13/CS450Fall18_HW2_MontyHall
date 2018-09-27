@@ -101,7 +101,10 @@ public class GameFragment extends Fragment {
         goatSound = soundPool.load(getContext(),R.raw.goat,1);
         carSound = soundPool.load(getContext(), R.raw.car,1);
 
+        // Get shared preferences
         SharedPreferences preferences = getActivity().getSharedPreferences("MontyHall",Context.MODE_PRIVATE);
+
+        // If there are no shared preferences, set stats to 0
         if(preferences == null){
             numberOfWinsAfterStay = 0;
             numberOfWinsAfterSwitch = 0;
@@ -110,6 +113,7 @@ public class GameFragment extends Fragment {
             totalLosses = 0;
             totalWins = 0;
         }else {
+            // If there are shared preferences, set stats to previous stats
             numberOfWinsAfterStay = preferences.getInt("winsAfterStay",0);
             numberOfWinsAfterSwitch = preferences.getInt("winsAfterSwitch",0);
             numberOfLossesAfterStay = preferences.getInt("lossesAfterStay",0);
@@ -118,6 +122,7 @@ public class GameFragment extends Fragment {
             totalWins = preferences.getInt("totalWins",0);
         }
 
+        // Set the stats
         iv_WinsAfterSwitch.setText(Integer.toString(numberOfWinsAfterSwitch));
         iv_WinsAfterStay.setText(Integer.toString(numberOfWinsAfterStay));
         iv_LossesAfterSwitch.setText(Integer.toString(numberOfLossesAfterSwitch));
@@ -125,10 +130,12 @@ public class GameFragment extends Fragment {
         iv_TotalLosses.setText(Integer.toString(totalLosses));
         iv_TotalWins.setText(Integer.toString(totalWins));
 
+        // If new game is clicked, start a new game
         if(preferences.getBoolean("NewClicked",false)){
             setDoors();
             preferences.edit().putBoolean("NewClicked",false).apply();
         }else{
+            // If anything else occurs ("continue game" or orientation change), get preferences
             behindDoor1 = preferences.getString("behindDoor1",null);
             behindDoor2 = preferences.getString("behindDoor2",null);
             behindDoor3 = preferences.getString("behindDoor3",null);
@@ -138,6 +145,7 @@ public class GameFragment extends Fragment {
             winStatus = preferences.getBoolean("winStatus",false);
             doorSwitched = preferences.getBoolean("doorSwitched",false);
             if(winnerChecked && doorRevealed>0){
+                // If the winner has already been checked, make sure the game shows that
                 ib_door1.setEnabled(false);
                 ib_door2.setEnabled(false);
                 ib_door3.setEnabled(false);
@@ -148,6 +156,7 @@ public class GameFragment extends Fragment {
                 yes_button.setVisibility(View.VISIBLE);
                 playAgain_button.setVisibility(View.VISIBLE);
             }else if(!winnerChecked && doorRevealed>0){
+                // If the winner has not been checked but a door has been revealed, show the goat in the proper place
                 ib_door1.setEnabled(false);
                 ib_door2.setEnabled(false);
                 ib_door3.setEnabled(false);
@@ -163,7 +172,7 @@ public class GameFragment extends Fragment {
             }
         }
 
-
+        // On click listener for door 1
         this.ib_door1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +186,7 @@ public class GameFragment extends Fragment {
             }
         });
 
+        // On click listener for door 2
         this.ib_door2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +199,7 @@ public class GameFragment extends Fragment {
             }
         });
 
+        // On click listener for door 3
         this.ib_door3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,10 +212,12 @@ public class GameFragment extends Fragment {
             }
         });
 
+        // On click listener for yes button
         this.yes_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                // Switch to proper door if user wants to switch door
                 switch (doorChosen) {
                     case 1:
                         if (doorRevealed == 2) {
@@ -247,6 +260,7 @@ public class GameFragment extends Fragment {
                 }
                 doorSwitched = true;
                 winnerChecked = true;
+                // Start a new count down
                 t = new Timer();
                 ctr = new Counter();
                 t.scheduleAtFixedRate(ctr, 0, 1000);
@@ -254,12 +268,15 @@ public class GameFragment extends Fragment {
             }
         });
 
+        // On click listener for no button
         this.no_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                // Keep doors the same and just check the winner
                 doorSwitched = false;
                 winnerChecked = true;
+                // Start a new countdown
                 t = new Timer();
                 ctr = new Counter();
                 t.scheduleAtFixedRate(ctr,0,1000);
@@ -267,9 +284,11 @@ public class GameFragment extends Fragment {
             }
         });
 
+        // On click listener for play again button
         this.playAgain_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Reset everything
                 ib_door1.setImageLevel(0);
                 ib_door2.setImageLevel(0);
                 ib_door3.setImageLevel(0);
@@ -291,6 +310,7 @@ public class GameFragment extends Fragment {
     }
 
 
+    // Method that randomly sets what is behind each door
     public void setDoors() {
         Random randomizer = new Random();
         int randomNumber1 = randomizer.nextInt(3) + 1;
@@ -317,6 +337,7 @@ public class GameFragment extends Fragment {
 
     }
 
+    // Method that randomly shows a goat in one of the doors that the user did not choose
     public void showGoat() {
         switch (doorChosen) {
             case 1:
@@ -396,6 +417,7 @@ public class GameFragment extends Fragment {
         no_button.setVisibility(View.VISIBLE);
     }
 
+    // Checks if the user won by properly revealing what is behind the chosen door and incrementing stats
     public void checkIfWinner() {
 
         switch (doorChosen) {
@@ -452,6 +474,7 @@ public class GameFragment extends Fragment {
 
 
 
+    // Timer class that performs a count down on the chosen door.
     class Counter extends TimerTask {
         private int count = 0;
         @Override
@@ -481,6 +504,7 @@ public class GameFragment extends Fragment {
 
     }
 
+    // Method to properly increment stats based on if the user won and if the user decided to switch their door
     public void incrementStats(){
         if (winStatus && doorSwitched) {
             numberOfWinsAfterSwitch++;
@@ -510,6 +534,7 @@ public class GameFragment extends Fragment {
     }
 
 
+    // Method that returns the image button for an inputted int value
     public ImageButton getIb_door(int door) {
 
         if(door == 1){
@@ -526,6 +551,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onDestroy() {
 
+        // Saves all values in saved preferences when app is destroyed
         SharedPreferences preferences = getActivity().getSharedPreferences("MontyHall", Context.MODE_PRIVATE);
         preferences.edit().putString("behindDoor1",behindDoor1).apply();
         preferences.edit().putString("behindDoor2",behindDoor2).apply();
@@ -540,6 +566,8 @@ public class GameFragment extends Fragment {
         preferences.edit().putInt("totalLosses",totalLosses).apply();
         preferences.edit().putBoolean("ContinueClicked",false).apply();
         preferences.edit().putBoolean("NewClicked",false).apply();
+
+        // If the winner is checked, certain values will not be defined so don't check them
         if(winnerChecked){
             preferences.edit().putBoolean("winnerChecked",winnerChecked).apply();
             preferences.edit().putBoolean("winStatus", winStatus).apply();
